@@ -66,7 +66,7 @@ func main() {
 		log.Fatalf("listen error: %v", err)
 	}
 
-	log.Printf("Server running on port %s (in-memory)", cfg.Port)
+	log.Printf("Server running on port %s (http://localhost:8080/)", cfg.Port)
 
 	serverErrCh := make(chan error, 1)
 	go func() {
