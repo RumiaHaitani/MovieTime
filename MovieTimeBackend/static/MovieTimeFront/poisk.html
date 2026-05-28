@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Присоединиться к комнате</title>
+<style>
+/* ========== ТВОИ ПОЛНЫЕ СТИЛИ (БЕЗ ИЗМЕНЕНИЙ) ========== */
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,sans-serif;
+}
+body{
+background:black;
+color:white;
+overflow-x:hidden;
+}
+.wrapper{
+width:100%;
+min-height:1290px;
+background:#05030a;
+display:flex;
+flex-direction:column;
+}
+header{
+width:100%;
+height:90px;
+background:#2a252d;
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:0 60px;
+position:relative;
+}
+.back{
+display:flex;
+align-items:center;
+gap:10px;
+color:#8b8b8b;
+cursor:pointer;
+transition:0.3s;
+}
+.back:hover{
+color:white;
+}
+.logo{
+position:absolute;
+width:161px;
+height:161px;
+background:black;
+border-radius:50%;
+top:19px;
+left:50%;
+transform:translateX(-50%);
+display:flex;
+justify-content:center;
+align-items:center;
+z-index:10;
+}
+.logo img{
+width:80px;
+object-fit:contain;
+}
+.profile{
+width:70px;
+height:70px;
+background:#0C0C10;
+border:2px solid #0C0C10;
+border-radius:50%;
+display:flex;
+justify-content:center;
+align-items:center;
+cursor:pointer;
+transition:0.3s;
+}
+.profile:hover{
+border-color:#ff004c;
+color:#ff004c;
+}
+.main{
+flex:1;
+min-height:1000px;
+padding:120px 60px 80px;
+}
+.main h1{
+font-size:64px;
+margin-bottom:70px;
+}
+.form{
+max-width:1200px;
+}
+.field{
+margin-bottom:45px;
+}
+.field label{
+display:block;
+margin-bottom:15px;
+font-size:24px;
+}
+.field input{
+width:100%;
+height:60px;
+background:rgba(255,255,255,0.05);
+border:2px solid #555;
+border-radius:30px;
+padding:0 25px;
+color:white;
+font-size:18px;
+outline:none;
+transition:0.3s;
+}
+.field input::placeholder{
+color:#777;
+}
+.field input:focus{
+border:2px solid #999;
+}
+.field input.error{
+border:2px solid #ff004c;
+box-shadow:
+0 0 10px rgba(255,0,76,0.4),
+0 0 20px rgba(255,0,76,0.2);
+}
+.join-btn{
+width:420px;
+height:90px;
+margin-top:20px;
+border:2px solid #ff004c;
+border-radius:8px;
+cursor:pointer;
+font-size:30px;
+color:#ff004c;
+background:linear-gradient(
+90deg,
+#000000 0%,
+#050505 45%,
+#1a0008 70%,
+#520018 85%,
+#ff004c 100%
+);
+transition:
+background 0.6s,
+color 0.4s,
+box-shadow 0.8s;
+box-shadow:
+0 0 10px rgba(255,0,76,0.2),
+0 0 25px rgba(255,0,76,0.15);
+}
+.join-btn:hover{
+background:#ff004c;
+color:black;
+box-shadow:
+0 0 20px rgba(255,0,76,0.5),
+0 0 50px rgba(255,0,76,0.35),
+0 0 100px rgba(255,0,76,0.2);
+}
+footer{
+width:100%;
+background:#2a252d;
+padding:40px 60px;
+color:#8d8d8d;
+font-size:14px;
+}
+footer p{
+margin-bottom:10px;
+}
+@media(max-width:900px){
+header{
+padding:0 20px;
+}
+.main{
+padding:120px 20px 60px;
+}
+.main h1{
+font-size:42px;
+}
+.field label{
+font-size:18px;
+}
+.join-btn{
+width:100%;
+}
+.logo{
+width:120px;
+height:120px;
+}
+.logo img{
+width:60px;
+}
+}
+</style>
+</head>
+<body>
+<div class="wrapper">
+    <header>
+        <div class="back" onclick="window.location.href='index.html'">
+            <img src="Vector%20(6).png" alt="">
+            <span>Вернуться на главную</span>
+        </div>
+        <div class="logo">
+            <img src="logo.png" alt="logo">
+        </div>
+        <div class="profile" onclick="window.location.href='profile.html'">
+            <img src="Vector%20(4).png" alt="profile">
+        </div>
+    </header>
+    <section class="main">
+        <h1>Присоединиться к комнате</h1>
+        <form class="form" id="joinForm">
+            <div class="field">
+                <label>Поиск комнаты по айди</label>
+                <input type="text" id="roomId" placeholder="Введите айди комнаты">
+            </div>
+            <button type="submit" class="join-btn">Присоединиться</button>
+        </form>
+    </section>
+    <footer>
+        <p>Связь с разработчиком (техподдержка)</p>
+        <p>Номер</p>
+        <p>Почта</p>
+        <p>Юз</p>
+    </footer>
+</div>
+
+<script>
+    const form = document.getElementById('joinForm');
+    const roomInput = document.getElementById('roomId');
+
+    form.addEventListener('submit', async (event) => {
+        event.preventDefault();
+        roomInput.classList.remove('error');
+        const roomId = roomInput.value.trim();
+        if (roomId === '') {
+            roomInput.classList.add('error');
+            return;
+        }
+
+        try {
+            // ✅ ПРАВИЛЬНЫЙ ЗАПРОС: /api/v1/rooms/{id}
+            const response = await fetch(`/api/v1/rooms/${roomId}`);
+            if (!response.ok) {
+                if (response.status === 404) throw new Error('Комната не найдена');
+                throw new Error('Ошибка подключения');
+            }
+            await response.json(); // проверяем, что комната есть
+
+            let nickname = localStorage.getItem('nickname');
+            if (!nickname) {
+                nickname = prompt('Введите ваше имя:', 'Гость');
+                if (!nickname) nickname = 'Гость_' + Math.floor(Math.random() * 1000);
+                localStorage.setItem('nickname', nickname);
+            }
+            let userId = localStorage.getItem('userId');
+            if (!userId) {
+                userId = 'user_' + Math.random().toString(36).substr(2, 8);
+                localStorage.setItem('userId', userId);
+            }
+            const params = new URLSearchParams({
+                roomId: roomId,
+                userId: userId,
+                nickname: nickname,
+                videoUrl: ''
+            });
+            window.location.href = `kino.html?${params.toString()}`;
+        } catch (err) {
+            alert(err.message);
+        }
+    });
+
+    roomInput.addEventListener('input', () => roomInput.classList.remove('error'));
+</script>
+</body>
+</html>

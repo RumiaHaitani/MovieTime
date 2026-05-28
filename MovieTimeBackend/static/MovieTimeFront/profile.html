@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Профиль</title>
+
+<style>
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,sans-serif;
+}
+
+body{
+background:#05030a;
+color:white;
+overflow-x:hidden;
+}
+
+.wrapper{
+width:100%;
+min-height:100vh;
+display:flex;
+flex-direction:column;
+}
+
+header{
+width:100%;
+height:90px;
+background:#2a252d;
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:0 60px;
+position:relative;
+}
+
+.back{
+display:flex;
+align-items:center;
+gap:10px;
+color:#8b8b8b;
+cursor:pointer;
+transition:0.3s;
+}
+
+.back:hover{
+color:white;
+}
+
+.logo{
+position:absolute;
+width:161px;
+height:161px;
+background:black;
+border-radius:50%;
+top:19px;
+left:50%;
+transform:translateX(-50%);
+display:flex;
+justify-content:center;
+align-items:center;
+}
+
+.logo img{
+width:80px;
+}
+
+.exit{
+display:flex;
+align-items:center;
+gap:15px;
+cursor:pointer;
+color:#c4c4c4;
+transition:0.3s;
+}
+
+.exit:hover{
+color:#ff004c;
+}
+
+.exit img{
+width:28px;
+}
+
+.main{
+flex:1;
+padding:140px 80px 80px;
+}
+
+.profile-title{
+font-size:64px;
+margin-bottom:70px;
+}
+
+.profile-content{
+display:flex;
+align-items:flex-start;
+gap:50px;
+margin-bottom:80px;
+}
+
+.avatar{
+width:230px;
+height:230px;
+border-radius:50%;
+overflow:hidden;
+background:#1b1b1b;
+flex-shrink:0;
+border:3px solid #2f2f2f;
+}
+
+.avatar img{
+width:100%;
+height:100%;
+object-fit:cover;
+}
+
+.fields{
+width:600px;
+display:flex;
+flex-direction:column;
+gap:35px;
+}
+
+.field{
+position:relative;
+}
+
+.field input{
+width:100%;
+height:75px;
+background:#2a252d;
+border:none;
+border-radius:24px;
+padding:0 75px 0 28px;
+color:white;
+font-size:24px;
+outline:none;
+transition:0.3s;
+}
+
+.field input:focus{
+border:2px solid #ff004c;
+}
+
+.edit-btn{
+position:absolute;
+right:24px;
+top:50%;
+transform:translateY(-50%);
+background:none;
+border:none;
+cursor:pointer;
+}
+
+.edit-btn img{
+width:28px;
+}
+.room-block{
+margin-top:40px;
+}
+
+.room-subtitle{
+font-size:42px;
+margin-bottom:35px;
+}
+
+.room-card{
+width:100%;
+max-width:950px;
+height:260px;
+background:#2a252d;
+border-radius:28px;
+overflow:hidden;
+display:flex;
+transition:0.3s;
+cursor:pointer;
+}
+
+.room-card:hover{
+transform:scale(1.01);
+}
+.room-cover{
+width:420px;
+height:100%;
+overflow:hidden;
+flex-shrink:0;
+}
+
+.room-cover img{
+width:100%;
+height:100%;
+object-fit:cover;
+}
+
+.room-info{
+padding:35px;
+display:flex;
+flex-direction:column;
+justify-content:center;
+}
+
+.room-name{
+font-size:42px;
+margin-bottom:25px;
+}
+
+.room-desc{
+font-size:22px;
+color:#c4c4c4;
+line-height:1.5;
+}
+
+footer{
+width:100%;
+background:#2a252d;
+padding:40px 60px;
+color:#8d8d8d;
+font-size:14px;
+}
+
+footer p{
+margin-bottom:10px;
+}
+@media(max-width:1100px){
+.profile-content{
+flex-direction:column;
+align-items:center;
+}
+
+.fields{
+width:100%;
+}
+.room-card{
+flex-direction:column;
+height:auto;
+}
+.room-cover{
+width:100%;
+height:250px;
+}
+.room-name{
+font-size:32px;
+}
+}
+</style>
+</head>
+<body>
+
+<div class="wrapper">
+
+
+<header>
+
+
+<header>
+    <a href="index.html">
+<div class="back">
+    <img src="Vector (6).png" alt="">
+    <span>
+        Вернуться на главную
+    </span>
+</div></a>
+
+<a href="index.html">
+<div class="logo">
+    <img src="logo.png" alt="logo">
+</div></a>
+
+<a href="profile.html">
+<div class="profile">
+    <img src="Vector (4).png" alt="profile">
+</div></a>
+</header>
+
+<!-- EXIT -->
+<a href="index.html">
+<div class="exit" id="exitBtn">
+<span>
+Выход
+</span>
+<img src="exit.png" alt="exit">
+</div></a>
+
+</header>
+
+<!-- MAIN -->
+
+<section class="main">
+
+<!-- TITLE -->
+
+<h1 class="profile-title">
+
+Это вы
+
+</h1>
+
+<!-- PROFILE -->
+
+<div class="profile-content">
+
+<!-- AVATAR -->
+
+<div class="avatar">
+
+<img
+src="avatar.jpg"
+alt="avatar"
+>
+
+</div>
+
+<!-- FIELDS -->
+
+<div class="fields">
+
+<!-- LOGIN -->
+
+<div class="field">
+
+<input
+type="text"
+id="login"
+value="MovieUser"
+>
+
+<button class="edit-btn">
+
+<img src="edit.png" alt="">
+
+</button>
+
+</div>
+
+<!-- EMAIL -->
+
+<div class="field">
+
+<input
+type="email"
+id="email"
+value="movie@gmail.com"
+>
+
+<button class="edit-btn">
+
+<img src="edit.png" alt="">
+
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- CURRENT ROOM -->
+
+<div class="room-block">
+
+<h2 class="room-subtitle">
+
+Текущая комната
+
+</h2>
+
+<!-- ROOM CARD -->
+
+<div class="room-card">
+
+<!-- COVER -->
+
+<div class="room-cover">
+
+<img
+src="movie-cover.jpg"
+alt=""
+>
+
+</div>
+
+<!-- INFO -->
+
+<div class="room-info">
+
+<h3 class="room-name">
+
+Интерстеллар — 2014
+
+</h3>
+
+<p class="room-desc">
+
+Сейчас вы смотрите фильм вместе
+с участниками комнаты
+«Миниатюрные мародеры».
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+<!-- FOOTER -->
+
+<footer>
+
+<p>
+Связь с разработчиком
+</p>
+
+<p>
+Почта
+</p>
+
+<p>
+Telegram
+</p>
+
+</footer>
+
+</div>
+
+<script>
+
+/* ---------------- SAVE PROFILE ---------------- */
+
+const loginInput =
+document.getElementById('login');
+
+const emailInput =
+document.getElementById('email');
+
+/* LOAD */
+
+window.addEventListener('load', function(){
+
+const savedLogin =
+localStorage.getItem('profileLogin');
+
+const savedEmail =
+localStorage.getItem('profileEmail');
+
+if(savedLogin){
+
+loginInput.value =
+savedLogin;
+}
+
+if(savedEmail){
+
+emailInput.value =
+savedEmail;
+}
+});
+
+/* SAVE LOGIN */
+
+loginInput.addEventListener('input', function(){
+
+localStorage.setItem(
+'profileLogin',
+loginInput.value
+);
+});
+
+/* SAVE EMAIL */
+
+emailInput.addEventListener('input', function(){
+
+localStorage.setItem(
+'profileEmail',
+emailInput.value
+);
+});
+
+/* ---------------- EXIT ---------------- */
+
+const exitBtn =
+document.getElementById('exitBtn');
+
+exitBtn.addEventListener('click', function(){
+
+alert('Вы вышли из аккаунта');
+
+/* ПРИ ЖЕЛАНИИ:
+window.location.href = 'index.html';
+*/
+});
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Movie Time</title>
+
+<style>
+*{
+margin: 0;
+padding: 0;
+box-sizing: border-box;
+font-family: Arial, sans-serif;
+}
+@font-face{
+font-family: 'TildaSans';
+src: url('./fonts/TildaSans-VF.ttf');
+font-weight: normal;
+font-style: normal;
+}
+body{
+background: black;
+color: white;
+overflow-x: hidden;
+font-family: 'TildaSans';
+}
+.wrapper{
+width: 100%;
+min-height: 100vh;
+background: #05030a;
+display: flex;
+flex-direction: column;
+}
+header{
+width: 100%;
+min-height: 100px;
+background: #2a252d;
+padding: 25px 60px;
+position: relative;
+display: flex;
+justify-content: flex-end;
+align-items: center;
+}
+.logo{
+position: absolute;
+width: 161px;
+height: 161px;
+background: black;
+border-radius: 50%;
+top: 19px;
+left: 879px;
+z-index: 10;
+display: flex;
+justify-content: center;
+align-items: center;
+}
+.logo img{
+width: 90px;
+object-fit: contain;
+}
+.header-buttons{
+display: flex;
+gap: 15px;
+}
+.login-btn{
+width: 170px;
+height: 50px;
+border: 2px solid #DF0139;
+background: transparent;
+color: #DF0139;
+border-radius: 5px;
+cursor: pointer;
+font-size: 18px;
+transition: 0.3s;
+}
+.login-btn:hover{
+background: #DF0139;
+color: white;
+}
+.reg-btn{
+width: 208px;
+height: 50px;
+background: #DF0139;
+border: 2px solid #DF0139;
+color: white;
+border-radius: 5px;
+cursor: pointer;
+font-size: 18px;
+transition: 0.3s;
+}
+.reg-btn:hover{
+background: #2a252d;
+color: #DF0139;
+}
+.main{
+width: 100%;
+display: flex;
+justify-content: space-between;
+align-items: center;
+padding: 100px 6%;
+gap: 50px;
+flex-wrap: wrap;
+}
+.left{
+flex: 1;
+min-width: 320px;
+}
+.left h1{
+font-size: clamp(60px, 8vw, 120px);
+margin-bottom: 40px;
+}
+.left p{
+max-width: 1000px;
+color: #bfbfbf;
+font-size: clamp(18px, 2vw, 28px);
+line-height: 1.8;
+margin-bottom: 60px;
+}
+.right{
+width: 50%;
+background: #DF0139;
+}
+.create-room{
+width: 650px;
+height: 100px;
+margin: 20px;
+transform: skew(-45deg);
+border: 3px solid #DF0139;
+display: block;
+background: linear-gradient(
+90deg,
+#000000 0%,
+#050505 40%,
+#63001e94 60%,
+#96002d 100%
+);
+color: #DF0139;
+font-size: 32px;
+cursor: pointer;
+position: relative;
+overflow: hidden;
+transition:
+background 0.6s,
+color 0.4s,
+box-shadow 0.8s;
+box-shadow:
+0 0 7px #ff004c40,
+0 0 12px #DF0139;
+}
+.create-room span{
+display: block;
+transform: skew(45deg);
+}
+.create-room:hover{
+background: linear-gradient(
+90deg,
+#DF0139 0%,
+#DF0139 100%
+);
+color: black;
+box-shadow:
+0 0 20px rgba(255,0,76,0.7),
+0 0 40px rgba(255,0,76,0.6),
+0 0 80px rgba(255,0,76,0.5),
+0 0 120px rgba(255,0,76,0.35);
+}
+.join-room{
+width: min(577px, 100%);
+height: 80px;
+background: transparent;
+border: 2px solid #DF0139;
+color: #DF0139;
+font-size: clamp(20px, 2vw, 28px);
+transform: skew(-50deg);
+cursor: pointer;
+transition: 0.3s;
+display: block;
+}
+.join-room span{
+display: block;
+transform: skew(50deg);
+}
+.join-room:hover{
+background: #DF0139;
+color: black;
+}footer{
+width: 100%;
+background: #2a252d;
+padding: 60px 6%;
+color: #9e9e9e;
+font-size: clamp(16px, 1.5vw, 20px);
+}
+footer p{
+margin-bottom: 15px;
+}
+@media(max-width: 900px){
+header{
+justify-content: center;
+padding-top: 90px;
+padding-bottom: 30px;
+}
+.logo{
+top: 20px;
+}
+.main{
+flex-direction: column;
+text-align: center;
+}
+.left p{
+margin-left: auto;
+margin-right: auto;
+}
+.create-room,
+.join-room{
+transform: none;
+}
+.create-room span,
+.join-room span{
+transform: skew(40deg);
+display: block;
+}
+.right{
+height: 500px;
+}
+.info{
+    color: #FFFFFF4D;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 50px;
+    position: absolute;
+    top: 100px;
+    left: 200px;
+    }
+}
+</style>
+</head>
+
+<body>
+    <div class="wrapper">
+        <header>
+
+    <a href="index.html">
+<div class="back">
+    <img src="Vector (6).png" alt="">
+    <span>
+        Вернуться на главную
+    </span>
+</div></a>
+
+<a href="index.html">
+<div class="logo">
+    <img src="logo.png" alt="logo">
+</div></a>
+
+<a href="profile.html">
+<div class="profile">
+    <img src="Vector (4).png" alt="profile">
+</div></a>
+</header>
+        
+        <section class="main">
+            <div class="left">
+                <h1>Movie time</h1>
+                <p>Сайт для совместного просмотра контента в реальном времени. Он связывает людей по всему миру, <br>
+                    синхронизируя видеоролики и аудиопотоки с точностью до миллисекунды.
+                </p>
+                <a href="create.html">
+                <button class="create-room">
+                    <span>Создать комнату</span>
+                </button></a>
+                <a href="poisk.html">
+                    <button class="join-room">
+                        <span>Присоединиться к комнате</span>
+                    </button></a>
+
+
+</div>
+
+<footer>
+
+<p>Связь с разработчиком (техподдержка)</p>
+<p>Номер</p>
+<p>Почта</p>
+<p>Юз</p>
+
+<div class="info">
+<span>Данный сайт является учебным проектом, созданным в образовательных целях.Он не представляет собой коммерческий продукт, не имеет юридической силы и не несёт никакой юридической,</span>
+<span>финансовой или иной ответственности для авторов, владельцев или пользователей.Все материалы, представленные на сайте, носят ознакомительный характер и могут не соответствовать действительности. </span>
+</footer>
+</div>
+</div>
+
+</body>
+</html>

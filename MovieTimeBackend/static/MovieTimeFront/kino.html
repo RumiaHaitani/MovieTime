@@ -1,0 +1,808 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Movie Room</title>
+<style>
+/* ========== ТВОИ ПОЛНЫЕ СТИЛИ (скопируй из своего файла, чтобы не потерять) ========== */
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,sans-serif;
+}
+body{
+background:#05030a;
+color:white;
+overflow-x:hidden;
+}
+.wrapper{
+width:100%;
+min-height:100vh;
+display:flex;
+flex-direction:column;
+}
+header{
+width:100%;
+height:90px;
+background:#2a252d;
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:0 60px;
+position:relative;
+}
+.back{
+display:flex;
+align-items:center;
+gap:10px;
+color:#8b8b8b;
+cursor:pointer;
+transition:0.3s;
+}
+.back:hover{
+color:white;
+}
+.logo{
+position:absolute;
+width:161px;
+height:161px;
+background:black;
+border-radius:50%;
+top:19px;
+left:50%;
+transform:translateX(-50%);
+display:flex;
+justify-content:center;
+align-items:center;
+}
+.logo img{
+width:80px;
+}
+.profile{
+width:70px;
+height:70px;
+border-radius:50%;
+background:#111;
+display:flex;
+justify-content:center;
+align-items:center;
+cursor:pointer;
+}
+.main{
+flex:1;
+padding:120px 60px 60px;
+}
+.room-title{
+font-size:64px;
+margin-bottom:40px;
+}
+.content{
+display:flex;
+gap:35px;
+}
+.video-section{
+width:70%;
+}
+.video-box{
+width:100%;
+height:720px;
+background:black;
+border-radius:18px;
+overflow:hidden;
+position:relative;
+}
+.video-box iframe{
+width:100%;
+height:100%;
+border:0;
+}
+.video-box #youtubePlayer{
+width:100%;
+height:100%;
+}
+.video-title{
+position:absolute;
+top:20px;
+left:20px;
+z-index:20;
+padding:12px 22px;
+background:rgba(0,0,0,0.55);
+border-radius:15px;
+font-size:24px;
+backdrop-filter:blur(6px);
+}
+.bottom-controls{
+position:absolute;
+left:0;
+right:0;
+bottom:0;
+padding:20px;
+background:linear-gradient(transparent, rgba(0,0,0,0.9));
+}
+.progress-bar{
+width:100%;
+margin-bottom:15px;
+cursor:pointer;
+appearance:none;
+height:6px;
+border-radius:20px;
+background:#3a3a3a;
+overflow:hidden;
+}
+.progress-bar::-webkit-slider-thumb{
+appearance:none;
+width:0;
+height:0;
+box-shadow:-1000px 0 0 1000px #ff004c;
+}
+.progress-bar::-webkit-slider-runnable-track{
+height:6px;
+border-radius:20px;
+}
+.controls-row{
+position:relative;
+width:100%;
+height:60px;
+}
+.controls-row button{
+position:absolute;
+width:36px;
+height:36px;
+border:none;
+background:none;
+cursor:pointer;
+transition:0.3s;
+}
+.controls-row button:hover{
+transform:scale(1.08);
+}
+.controls-row img{
+width:100%;
+height:100%;
+object-fit:contain;
+}
+.current-time{
+position:absolute;
+left:0;
+top:-48px;
+font-size:15px;
+}
+.duration{
+position:absolute;
+right:0;
+top:-48px;
+font-size:15px;
+}
+.volume-slider-wrapper{
+position:absolute;
+left:66px;
+top:5px;
+width:80px;
+}
+.volume-slider{
+width:100%;
+cursor:pointer;
+appearance:none;
+height:4px;
+border-radius:4px;
+background:#3a3a3a;
+outline:none;
+}
+.volume-slider::-webkit-slider-thumb{
+appearance:none;
+width:12px;
+height:12px;
+border-radius:50%;
+background:#ff004c;
+cursor:pointer;
+}
+#backBtn{ left:379px; top:5px; }
+#playBtn{ left:499px; top:5px; }
+#forwardBtn{ left:619px; top:5px; }
+#fullscreenBtn{ right:247px; top:5px; }
+.room-id{
+width:calc(100% + 35% + 35px);
+height:70px;
+background:#2b252d;
+border-radius:18px;
+margin-top:25px;
+display:flex;
+align-items:center;
+justify-content:space-between;
+padding:0 30px;
+color:#d8d8d8;
+font-size:22px;
+}
+.copy{
+font-size:28px;
+cursor:pointer;
+transition:0.3s;
+}
+.copy:hover{ color:#ff004c; }
+.chat-section{
+width:30%;
+}
+.chat-box{
+width:100%;
+height:720px;
+background:#2a252d;
+border-radius:18px;
+overflow:hidden;
+display:flex;
+flex-direction:column;
+}
+.chat-top{
+width:100%;
+padding:25px;
+text-align:center;
+}
+.chat-title{
+color:#ff004c;
+font-size:32px;
+margin-bottom:18px;
+}
+.chat-line{
+width:100%;
+height:2px;
+background:#ff004c;
+}
+.messages{
+flex:1;
+padding:25px;
+overflow-y:auto;
+display:flex;
+flex-direction:column;
+gap:18px;
+}
+.message{
+display:flex;
+align-items:flex-end;
+gap:12px;
+}
+.avatar{
+width:45px;
+height:45px;
+border-radius:50%;
+background:#111;
+}
+.message-text{
+max-width:75%;
+padding:14px 18px;
+border-radius:18px;
+font-size:16px;
+}
+.user{ justify-content:flex-end; }
+.user .message-text{ background:white; color:black; border-bottom-right-radius:5px; }
+.other .message-text{ background:black; color:white; border-bottom-left-radius:5px; }
+.system .message-text{ background:#3a3a3a; color:#ccc; font-style:italic; }
+.chat-input{
+padding:20px;
+}
+.chat-field{
+width:100%;
+height:60px;
+background:white;
+border-radius:40px;
+display:flex;
+align-items:center;
+padding:0 8px 0 22px;
+}
+.chat-field input{
+flex:1;
+height:100%;
+border:none;
+background:none;
+color:black;
+font-size:16px;
+outline:none;
+}
+.send-btn{
+width:46px;
+height:46px;
+border:none;
+border-radius:50%;
+background:#ff004c;
+display:flex;
+justify-content:center;
+align-items:center;
+cursor:pointer;
+}
+.send-btn img{ width:20px; }
+.users-list{
+background:#2a252d;
+border-radius:18px;
+padding:15px;
+margin-bottom:15px;
+}
+.users-list h3{ margin-bottom:10px; font-size:20px; color:#ff004c; }
+#usersContainer{
+display:flex;
+flex-wrap:wrap;
+gap:8px;
+}
+.user-badge{
+background:#1e1e1e;
+padding:5px 12px;
+border-radius:20px;
+font-size:14px;
+}
+.reactions-block{
+display:flex;
+justify-content:space-around;
+margin-bottom:15px;
+}
+.reaction-btn{
+background:#1e1e1e;
+border:none;
+font-size:28px;
+padding:8px;
+border-radius:50%;
+cursor:pointer;
+transition:0.2s;
+}
+.reaction-btn:hover{ transform:scale(1.2); background:#ff004c; }
+.vote-block{
+background:#2a252d;
+border-radius:18px;
+padding:15px;
+margin-bottom:15px;
+}
+.vote-block h3{ margin-bottom:10px; font-size:20px; color:#ff004c; }
+#suggestVideoInput{
+width:100%;
+padding:8px;
+border-radius:30px;
+border:none;
+margin-bottom:8px;
+}
+#suggestBtn{
+background:#ff004c;
+border:none;
+border-radius:30px;
+padding:8px;
+width:100%;
+cursor:pointer;
+color:white;
+font-weight:bold;
+}
+.suggestion-item{
+background:#1e1e1e;
+margin-top:10px;
+padding:10px;
+border-radius:12px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+}
+.vote-btn{
+background:#ff004c;
+border:none;
+border-radius:20px;
+padding:5px 12px;
+cursor:pointer;
+color:white;
+}
+footer{
+width:100%;
+background:#2a252d;
+padding:40px 60px;
+color:#8d8d8d;
+font-size:14px;
+}
+footer p{ margin-bottom:10px; }
+@media(max-width:900px){
+.content{ flex-direction:column; }
+.video-section, .chat-section{ width:100%; }
+.room-title{ font-size:32px; }
+.main{ padding:60px 20px; }
+}
+</style>
+</head>
+<body>
+<div class="wrapper">
+    <header>
+        <a href="index.html"><div class="back"><img src="Vector%20(6).png" alt=""><span>Вернуться на главную</span></div></a>
+        <a href="index.html"><div class="logo"><img src="logo.png" alt="logo"></div></a>
+        <a href="profile.html"><div class="profile"><img src="Vector%20(4).png" alt="profile"></div></a>
+    </header>
+    <section class="main">
+        <h1 class="room-title" id="roomTitle">Комната загрузки...</h1>
+        <div class="content">
+            <div class="video-section">
+                <div class="video-box">
+                    <div class="video-title" id="playerTitle">Плеер</div>
+                    <div id="youtubePlayer" style="display:none;"></div>
+                    <iframe id="rutubePlayer" src="" frameborder="0" allowfullscreen style="display:none;"></iframe>
+                    <div class="bottom-controls">
+                        <input type="range" id="progress" class="progress-bar" min="0" max="100" value="0">
+                        <div class="controls-row">
+                            <div class="current-time" id="currentTime">0:00</div>
+                            <div class="volume-slider-wrapper">
+                                <input type="range" id="volumeSlider" class="volume-slider" min="0" max="100" value="100">
+                            </div>
+                            <button id="playBtn"><img src="Vector%20(9).png" alt=""></button>
+                            <button id="backBtn"><img src="Vector%20(6).png" alt=""></button>
+                            <button id="forwardBtn"><img src="Vector%20(10).png" alt=""></button>
+                            <button id="fullscreenBtn"><img src="Vector%20(11).png" alt=""></button>
+                            <div class="duration" id="duration">0:00</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="room-id">
+                    <span>ID: <span id="roomIdSpan"></span></span>
+                    <div class="copy" id="copyBtn">∞</div>
+                </div>
+            </div>
+            <div class="chat-section">
+                <div class="chat-box">
+                    <div class="chat-top"><h2 class="chat-title">Чат</h2><div class="chat-line"></div></div>
+                    <div class="messages" id="messages"></div>
+                    <div class="users-list"><h3>👥 Участники</h3><div id="usersContainer"></div></div>
+                    <div class="reactions-block" id="reactionBar">
+                        <button class="reaction-btn" data-emoji="👍">👍</button>
+                        <button class="reaction-btn" data-emoji="🔥">🔥</button>
+                        <button class="reaction-btn" data-emoji="😂">😂</button>
+                        <button class="reaction-btn" data-emoji="❤️">❤️</button>
+                        <button class="reaction-btn" data-emoji="🎉">🎉</button>
+                    </div>
+                    <div class="vote-block">
+                        <h3>🎬 Голосование за видео</h3>
+                        <input type="text" id="suggestVideoInput" placeholder="Ссылка на YouTube или Rutube">
+                        <button id="suggestBtn">Предложить видео</button>
+                        <div id="suggestionsList"></div>
+                    </div>
+                    <div class="chat-input">
+                        <div class="chat-field">
+                            <input type="text" id="messageInput" placeholder="Введите сообщение">
+                            <button class="send-btn" id="sendBtn"><img src="send.png" alt=""></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <footer><p>Связь с разработчиком</p><p>Почта</p><p>Telegram</p></footer>
+</div>
+
+<script src="https://www.youtube.com/iframe_api"></script>
+<script>
+    // ========== ПАРАМЕТРЫ КОМНАТЫ ==========
+    const urlParams = new URLSearchParams(window.location.search);
+    const roomId = urlParams.get('roomId');
+    const userId = urlParams.get('userId');
+    let nickname = urlParams.get('nickname');
+    if (!roomId || !userId || !nickname) {
+        alert('Ошибка: не указан ID комнаты или имя пользователя');
+        window.location.href = 'index.html';
+    }
+    nickname = nickname.replace(/[<>]/g, '');
+    document.getElementById('roomIdSpan').innerText = roomId;
+    document.getElementById('roomTitle').innerText = `Комната "${nickname}"`;
+
+    // ========== ПЕРЕМЕННЫЕ ПЛЕЕРА ==========
+    let playerType = null; // 'youtube' or 'rutube'
+    let youtubePlayer = null;
+    let rutubeFrame = document.getElementById('rutubePlayer');
+    let playerReady = false;
+    let ignoreSync = false;
+    let currentVideoId = '';
+    let currentTimeLocal = 0;
+    let durationLocal = 0;
+    let isPlayingLocal = false;
+    let progressInterval;
+
+    // ========== ФУНКЦИИ УПРАВЛЕНИЯ ==========
+    function formatTime(sec) {
+        if (!sec || isNaN(sec)) return '0:00';
+        const mins = Math.floor(sec / 60);
+        const secs = Math.floor(sec % 60);
+        return mins + ':' + (secs < 10 ? '0' : '') + secs;
+    }
+
+    function updateProgressUI(current, duration) {
+        if (duration) {
+            document.getElementById('progress').value = (current / duration) * 100;
+            document.getElementById('currentTime').innerText = formatTime(current);
+            document.getElementById('duration').innerText = formatTime(duration);
+        }
+    }
+
+    // ========== YOUTUBE ==========
+    function initYouTube(videoId) {
+        playerType = 'youtube';
+        document.getElementById('youtubePlayer').style.display = 'block';
+        rutubeFrame.style.display = 'none';
+        document.getElementById('playerTitle').innerText = 'YouTube плеер';
+        if (youtubePlayer && youtubePlayer.loadVideoById) {
+            youtubePlayer.loadVideoById(videoId);
+        } else {
+            youtubePlayer = new YT.Player('youtubePlayer', {
+                height: '100%', width: '100%',
+                videoId: videoId,
+                playerVars: { controls: 0, disablekb: 1, modestbranding: 1, rel: 0 },
+                events: {
+                    onReady: () => {
+                        playerReady = true;
+                        durationLocal = youtubePlayer.getDuration();
+                        updateProgressUI(youtubePlayer.getCurrentTime(), durationLocal);
+                        const vol = document.getElementById('volumeSlider').value;
+                        youtubePlayer.setVolume(parseInt(vol));
+                        startProgressTracking();
+                    },
+                    onStateChange: (e) => {
+                        if (!ignoreSync && playerReady) {
+                            if (e.data === YT.PlayerState.PLAYING) sendCommand('play');
+                            else if (e.data === YT.PlayerState.PAUSED) sendCommand('pause');
+                        }
+                    }
+                }
+            });
+        }
+        currentVideoId = videoId;
+    }
+
+    function youTubePlay() { if (youtubePlayer) youtubePlayer.playVideo(); }
+    function youTubePause() { if (youtubePlayer) youtubePlayer.pauseVideo(); }
+    function youTubeSeek(time) { if (youtubePlayer) youtubePlayer.seekTo(time, true); }
+    function youTubeVolume(vol) { if (youtubePlayer) youtubePlayer.setVolume(vol); }
+    function youTubeCurrentTime() { return youtubePlayer ? youtubePlayer.getCurrentTime() : 0; }
+    function youTubeDuration() { return youtubePlayer ? youtubePlayer.getDuration() : 0; }
+
+    // ========== RUTUBE ==========
+    function initRutube(videoId) {
+        playerType = 'rutube';
+        document.getElementById('youtubePlayer').style.display = 'none';
+        rutubeFrame.style.display = 'block';
+        document.getElementById('playerTitle').innerText = 'RUTUBE плеер';
+        rutubeFrame.src = `https://rutube.ru/play/embed/${videoId}/`;
+        rutubeFrame.onload = () => {
+            playerReady = true;
+            startProgressTracking();
+            // Запрашиваем текущее время через postMessage (если API поддерживает)
+            // В противном случае используем локальный таймер
+        };
+        currentVideoId = videoId;
+        // Для Rutube у нас нет API получения времени, поэтому используем локальный таймер
+        // При инициализации сбрасываем счётчики
+        currentTimeLocal = 0;
+        durationLocal = 0;
+        isPlayingLocal = false;
+        updateProgressUI(0, 0);
+    }
+
+    function rutubeSend(command, data) {
+        rutubeFrame.contentWindow.postMessage({ type: command, data: data }, '*');
+    }
+    function rutubePlay() { rutubeSend('player:play'); isPlayingLocal = true; }
+    function rutubePause() { rutubeSend('player:pause'); isPlayingLocal = false; }
+    function rutubeSeek(time) { rutubeSend('player:setCurrentTime', { time: time }); currentTimeLocal = time; }
+    function rutubeVolume(vol) { rutubeSend('player:setVolume', { volume: vol }); }
+
+    // Универсальные функции управления
+    function play() {
+        if (!playerReady) return;
+        if (playerType === 'youtube') youTubePlay();
+        else if (playerType === 'rutube') rutubePlay();
+        sendCommand('play');
+    }
+    function pause() {
+        if (!playerReady) return;
+        if (playerType === 'youtube') youTubePause();
+        else if (playerType === 'rutube') rutubePause();
+        sendCommand('pause');
+    }
+    function seek(time) {
+        if (!playerReady) return;
+        if (playerType === 'youtube') youTubeSeek(time);
+        else if (playerType === 'rutube') rutubeSeek(time);
+        sendCommand('seek', time);
+    }
+    function setVolume(vol) {
+        if (!playerReady) return;
+        if (playerType === 'youtube') youTubeVolume(vol);
+        else if (playerType === 'rutube') rutubeVolume(vol);
+    }
+    function getCurrentTime() {
+        if (!playerReady) return 0;
+        if (playerType === 'youtube') return youTubeCurrentTime();
+        else if (playerType === 'rutube') return currentTimeLocal;
+        return 0;
+    }
+    function getDuration() {
+        if (!playerReady) return 0;
+        if (playerType === 'youtube') return youTubeDuration();
+        else return durationLocal;
+    }
+
+    function startProgressTracking() {
+        if (progressInterval) clearInterval(progressInterval);
+        progressInterval = setInterval(() => {
+            if (playerReady) {
+                let current = getCurrentTime();
+                let dur = getDuration();
+                if (dur > 0) {
+                    updateProgressUI(current, dur);
+                    if (playerType === 'rutube') {
+                        // Для Rutube локально обновляем время, если воспроизведение активно
+                        if (isPlayingLocal) {
+                            currentTimeLocal += 0.5;
+                            if (currentTimeLocal >= durationLocal) currentTimeLocal = durationLocal;
+                            updateProgressUI(currentTimeLocal, durationLocal);
+                        }
+                    }
+                }
+            }
+        }, 500);
+    }
+
+    // ========== WEB SOCKET ==========
+    let ws;
+    function connectWS() {
+        ws = new WebSocket(`ws://localhost:8080/ws?roomId=${roomId}&userId=${userId}&nickname=${encodeURIComponent(nickname)}`);
+        ws.onopen = () => console.log('WS connected');
+        ws.onmessage = (e) => {
+            const msg = JSON.parse(e.data);
+            handleMessage(msg);
+        };
+        ws.onclose = () => setTimeout(connectWS, 3000);
+    }
+
+    function sendCommand(action, time = null) {
+        if (ws && ws.readyState === WebSocket.OPEN) {
+            ws.send(JSON.stringify({ type: 'command', data: { action, time } }));
+        }
+    }
+    function sendChangeVideo(videoId) {
+        if (ws && ws.readyState === WebSocket.OPEN) {
+            ws.send(JSON.stringify({ type: 'change_video', data: { videoId: videoId } }));
+        }
+    }
+
+    function loadVideo(videoId) {
+        if (!videoId || videoId === currentVideoId) return;
+        currentVideoId = videoId;
+        // Определяем тип плеера по длине ID (YouTube ID = 11 символов, Rutube ID = 32 hex)
+        if (videoId.length === 11) {
+            initYouTube(videoId);
+        } else {
+            initRutube(videoId);
+        }
+        sendChangeVideo(videoId);
+    }
+
+    function handleMessage(msg) {
+        switch(msg.type) {
+            case 'room_state':
+                if (msg.data.videoId && (!playerReady || msg.data.videoId !== currentVideoId)) {
+                    loadVideo(msg.data.videoId);
+                }
+                if (msg.data.currentTime !== undefined && playerReady && !ignoreSync) {
+                    ignoreSync = true;
+                    seek(msg.data.currentTime);
+                    if (msg.data.isPlaying) play();
+                    else pause();
+                    setTimeout(() => ignoreSync = false, 500);
+                }
+                if (msg.data.history) msg.data.history.forEach(m => addChatMessage(m));
+                if (msg.data.users) updateUsersList(msg.data.users);
+                if (msg.data.voteState) updateVoteUI(msg.data.voteState);
+                break;
+            case 'sync':
+                if (playerReady && !ignoreSync) {
+                    ignoreSync = true;
+                    if (msg.data.currentTime !== undefined) seek(msg.data.currentTime);
+                    if (msg.data.isPlaying) play();
+                    else pause();
+                    setTimeout(() => ignoreSync = false, 500);
+                }
+                break;
+            case 'new_message': addChatMessage(msg.data); break;
+            case 'user_list': updateUsersList(msg.data); break;
+            case 'new_reaction': showFloatingReaction(msg.data.emoji); break;
+            case 'vote_updated': updateVoteUI(msg.data); break;
+        }
+    }
+
+    // ========== КНОПКИ ==========
+    document.getElementById('playBtn').onclick = () => {
+        if (playerReady) {
+            if (playerType === 'youtube' && youtubePlayer && youtubePlayer.getPlayerState() === 1) pause();
+            else if (playerType === 'rutube' && isPlayingLocal) pause();
+            else play();
+        }
+    };
+    document.getElementById('backBtn').onclick = () => {
+        if (playerReady) {
+            const newTime = Math.max(0, getCurrentTime() - 10);
+            seek(newTime);
+        }
+    };
+    document.getElementById('forwardBtn').onclick = () => {
+        if (playerReady) {
+            const newTime = Math.min(getDuration(), getCurrentTime() + 10);
+            seek(newTime);
+        }
+    };
+    document.getElementById('fullscreenBtn').onclick = () => {
+        const el = playerType === 'youtube' ? document.getElementById('youtubePlayer') : rutubeFrame;
+        if (el && el.requestFullscreen) el.requestFullscreen();
+    };
+    document.getElementById('progress').oninput = (e) => {
+        if (!playerReady) return;
+        const dur = getDuration();
+        if (dur) seek((e.target.value / 100) * dur);
+    };
+    const volSlider = document.getElementById('volumeSlider');
+    volSlider.oninput = (e) => setVolume(parseInt(e.target.value));
+
+    // ========== ЧАТ, РЕАКЦИИ, ГОЛОСОВАНИЕ ==========
+    function sendChatMessage(text) { ws.send(JSON.stringify({ type: 'chat_message', data: { text } })); }
+    function addChatMessage(m) {
+        const container = document.getElementById('messages');
+        const div = document.createElement('div');
+        div.className = `message ${m.userId === userId ? 'user' : (m.userId === 'system' ? 'system' : 'other')}`;
+        div.innerHTML = `<div class="message-text"><strong>${escapeHtml(m.nickname)}</strong>: ${escapeHtml(m.text)}</div>`;
+        container.appendChild(div);
+        container.scrollTop = container.scrollHeight;
+    }
+    function sendReaction(emoji) { ws.send(JSON.stringify({ type: 'reaction', data: { emoji } })); }
+    function showFloatingReaction(emoji) {
+        const div = document.createElement('div');
+        div.innerText = emoji;
+        div.style.cssText = 'position:fixed;bottom:30%;left:50%;font-size:48px;transform:translateX(-50%);opacity:1;transition:all 1s ease-out;z-index:1000';
+        document.body.appendChild(div);
+        setTimeout(() => div.style.opacity = '0', 100);
+        setTimeout(() => div.remove(), 1100);
+    }
+    function sendSuggestVideo(url) { ws.send(JSON.stringify({ type: 'vote_video', data: { action: 'suggest', videoUrl: url } })); }
+    function sendVote(sid) { ws.send(JSON.stringify({ type: 'vote_video', data: { action: 'vote', suggestionId: sid } })); }
+    function updateVoteUI(vs) {
+        const container = document.getElementById('suggestionsList');
+        if (!vs || !vs.suggestions) { container.innerHTML = ''; return; }
+        container.innerHTML = '';
+        vs.suggestions.forEach(s => {
+            const div = document.createElement('div');
+            div.className = 'suggestion-item';
+            div.innerHTML = `<span><strong>${escapeHtml(s.suggestedBy)}</strong>: ${escapeHtml(s.videoUrl)} (${s.votes} гол.)</span>`;
+            const btn = document.createElement('button');
+            btn.innerText = 'Голосовать';
+            btn.className = 'vote-btn';
+            btn.onclick = () => sendVote(s.id);
+            div.appendChild(btn);
+            container.appendChild(div);
+        });
+    }
+    function updateUsersList(users) {
+        const container = document.getElementById('usersContainer');
+        container.innerHTML = '';
+        if (!Array.isArray(users)) users = Object.values(users);
+        users.forEach(u => {
+            const badge = document.createElement('span');
+            badge.className = 'user-badge';
+            badge.innerText = u.nickname;
+            container.appendChild(badge);
+        });
+    }
+    function escapeHtml(str) { return str.replace(/[&<>]/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;'})[m]); }
+
+    document.getElementById('sendBtn').onclick = () => {
+        const inp = document.getElementById('messageInput');
+        if (inp.value.trim()) sendChatMessage(inp.value.trim());
+        inp.value = '';
+    };
+    document.getElementById('messageInput').addEventListener('keypress', e => { if (e.key === 'Enter') document.getElementById('sendBtn').click(); });
+    document.getElementById('copyBtn').onclick = () => { navigator.clipboard.writeText(roomId); alert('ID скопирован'); };
+    document.querySelectorAll('.reaction-btn').forEach(btn => btn.onclick = () => sendReaction(btn.dataset.emoji));
+    document.getElementById('suggestBtn').onclick = () => {
+        const url = document.getElementById('suggestVideoInput').value.trim();
+        if (url) sendSuggestVideo(url);
+        document.getElementById('suggestVideoInput').value = '';
+    };
+
+    connectWS();
+    window.onYouTubeIframeAPIReady = () => {}; // заглушка
+</script>
+</body>
+</html>
